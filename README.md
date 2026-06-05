@@ -10,9 +10,9 @@
 python -m http.server 5174 --bind 127.0.0.1 --directory .\outputs\equal-love-diagnosis
 ```
 
-## 写真の入れ方
+## 写真
 
-公式画像や公式ロゴは入れていません。許可を得た画像や自作画像を使う場合は、以下のファイル名で `assets/members/` に配置すると結果画面とトップの丸アイコンに表示されます。
+メンバー画像は `assets/members/` に入っています。差し替える場合は、以下の同じファイル名で画像を置き換えると結果画面とトップの丸アイコンに表示されます。
 
 - `otani-emiri.jpg`
 - `oba-hana.jpg`

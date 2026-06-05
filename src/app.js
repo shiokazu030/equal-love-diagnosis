@@ -1,29 +1,16 @@
 import diagnosisData from "./data/diagnosisData.js";
 
 const memberPhotos = {
-  "大谷映美里": "",
-  "大場花菜": "",
-  "音嶋莉沙": "",
-  "齋藤樹愛羅": "",
-  "佐々木舞香": "",
-  "髙松瞳": "",
-  "瀧脇笙古": "",
-  "野口衣織": "",
-  "諸橋沙夏": "",
-  "山本杏奈": "",
-};
-
-const photoFiles = {
-  "大谷映美里": "otani-emiri.jpg",
-  "大場花菜": "oba-hana.jpg",
-  "音嶋莉沙": "otoshima-risa.jpg",
-  "齋藤樹愛羅": "saito-kiara.jpg",
-  "佐々木舞香": "sasaki-maika.jpg",
-  "髙松瞳": "takamatsu-hitomi.jpg",
-  "瀧脇笙古": "takiwaki-shoko.jpg",
-  "野口衣織": "noguchi-iori.jpg",
-  "諸橋沙夏": "morohashi-sana.jpg",
-  "山本杏奈": "yamamoto-anna.jpg",
+  "大谷映美里": "./assets/members/otani-emiri.jpg",
+  "大場花菜": "./assets/members/oba-hana.jpg",
+  "音嶋莉沙": "./assets/members/otoshima-risa.jpg",
+  "齋藤樹愛羅": "./assets/members/saito-kiara.jpg",
+  "佐々木舞香": "./assets/members/sasaki-maika.jpg",
+  "髙松瞳": "./assets/members/takamatsu-hitomi.jpg",
+  "瀧脇笙古": "./assets/members/takiwaki-shoko.jpg",
+  "野口衣織": "./assets/members/noguchi-iori.jpg",
+  "諸橋沙夏": "./assets/members/morohashi-sana.jpg",
+  "山本杏奈": "./assets/members/yamamoto-anna.jpg",
 };
 
 const app = document.querySelector("#app");
@@ -34,7 +21,7 @@ const state = {
 };
 
 function getPhotoSrc(member) {
-  return memberPhotos[member] || `./assets/members/${photoFiles[member]}`;
+  return memberPhotos[member];
 }
 
 function renderMemberPhoto(member, className = "member-photo") {
@@ -231,7 +218,7 @@ function renderResult() {
       <footer class="result-actions">
         <button class="secondary-action" type="button" data-action="restart">もう一度診断する</button>
       </footer>
-      <p class="photo-note">写真を表示したい場合は、許可を得た画像を <code>assets/members/</code> に配置するか、<code>src/app.js</code> の <code>memberPhotos</code> にURLを設定してください。</p>
+      <p class="photo-note">メンバー画像は <code>assets/members/</code> から表示しています。</p>
       <p class="disclaimer">${diagnosisData.meta.disclaimer}</p>
     </section>
   `;
