@@ -115,7 +115,8 @@ function resetDiagnosis() {
 }
 
 function shareOnX(member) {
-  const text = diagnosisData.meta.shareTextTemplate.replace("{member}", member);
+  const pageUrl = window.location.href;
+  const text = `${diagnosisData.meta.shareTextTemplate.replace("{member}", member)}\n\n${pageUrl}`;
   const url = `https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}`;
   window.open(url, "_blank", "noopener,noreferrer");
 }
@@ -171,7 +172,6 @@ function renderQuestion() {
       </article>
       <footer class="quiz-controls">
         <button class="secondary-action" type="button" data-action="prev" ${state.currentIndex === 0 ? "disabled" : ""}>戻る</button>
-        <button class="secondary-action" type="button" data-action="next" ${state.currentIndex === diagnosisData.questions.length - 1 ? "disabled" : ""}>次へ</button>
         <button class="primary-action compact" type="button" data-action="result" ${canShowResult ? "" : "disabled"}>結果を見る</button>
       </footer>
       <p class="disclaimer">${diagnosisData.meta.disclaimer}</p>
@@ -189,7 +189,7 @@ function renderResult() {
       <article class="result-hero">
         ${renderMemberPhoto(member, "result-photo")}
         <p class="eyebrow">Your type is</p>
-        <h1>${member}タイプ</h1>
+        <h1><span>${member}</span><span>タイプ</span></h1>
         <h2>${result.title}</h2>
       </article>
       <section class="result-body">
@@ -218,7 +218,6 @@ function renderResult() {
       <footer class="result-actions">
         <button class="secondary-action" type="button" data-action="restart">もう一度診断する</button>
       </footer>
-      <p class="photo-note">メンバー画像は <code>assets/members/</code> から表示しています。</p>
       <p class="disclaimer">${diagnosisData.meta.disclaimer}</p>
     </section>
   `;
@@ -247,10 +246,6 @@ app.addEventListener("click", (event) => {
   if (action === "intro") resetDiagnosis();
   if (action === "prev") {
     state.currentIndex = Math.max(0, state.currentIndex - 1);
-    render();
-  }
-  if (action === "next") {
-    state.currentIndex = Math.min(diagnosisData.questions.length - 1, state.currentIndex + 1);
     render();
   }
   if (action === "result") showResult();
