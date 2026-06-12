@@ -159,7 +159,7 @@ function shareOnX(member) {
 }
 
 function renderCardStack() {
-  const featured = ["齋藤樹愛羅", "大谷映美里", "山本杏奈", "諸橋沙夏", "髙松瞳"];
+  const featured = ["大谷映美里", "齋藤樹愛羅", "山本杏奈", "諸橋沙夏", "髙松瞳"];
   return featured
     .map((member, index) => {
       const card = cardFor(member);
