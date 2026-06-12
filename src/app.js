@@ -1,16 +1,56 @@
 import diagnosisData from "./data/diagnosisData.js";
 
-const memberPhotos = {
-  "大谷映美里": "./assets/members/otani-emiri.jpg",
-  "大場花菜": "./assets/members/oba-hana.jpg",
-  "音嶋莉沙": "./assets/members/otoshima-risa.jpg",
-  "齋藤樹愛羅": "./assets/members/saito-kiara.jpg",
-  "佐々木舞香": "./assets/members/sasaki-maika.jpg",
-  "髙松瞳": "./assets/members/takamatsu-hitomi.jpg",
-  "瀧脇笙古": "./assets/members/takiwaki-shoko.jpg",
-  "野口衣織": "./assets/members/noguchi-iori.jpg",
-  "諸橋沙夏": "./assets/members/morohashi-sana.jpg",
-  "山本杏奈": "./assets/members/yamamoto-anna.jpg",
+const memberCards = {
+  "大谷映美里": {
+    image: "./assets/cards/optimized/otani-emiri-card.jpg",
+    theme: "#b793df",
+    charm: "Lavender jewel",
+  },
+  "大場花菜": {
+    image: "./assets/cards/optimized/oba-hana-card.jpg",
+    theme: "#f17b2d",
+    charm: "Orange ribbon",
+  },
+  "音嶋莉沙": {
+    image: "./assets/cards/optimized/otoshima-risa-card.jpg",
+    theme: "#9fd7ee",
+    charm: "Aqua lace",
+  },
+  "齋藤樹愛羅": {
+    image: "./assets/cards/optimized/saito-kiara-card.jpg",
+    theme: "#f58db8",
+    charm: "Pink heart",
+  },
+  "佐々木舞香": {
+    image: "./assets/cards/optimized/sasaki-maika-card.jpg",
+    theme: "#caa9e8",
+    charm: "Lilac bloom",
+  },
+  "髙松瞳": {
+    image: "./assets/cards/optimized/takamatsu-hitomi-card.jpg",
+    theme: "#e55f71",
+    charm: "Rose sparkle",
+  },
+  "瀧脇笙古": {
+    image: "./assets/cards/optimized/takiwaki-shoko-card.jpg",
+    theme: "#f3c94d",
+    charm: "Golden star",
+  },
+  "野口衣織": {
+    image: "./assets/cards/optimized/noguchi-iori-card.jpg",
+    theme: "#9a68d1",
+    charm: "Violet prism",
+  },
+  "諸橋沙夏": {
+    image: "./assets/cards/optimized/morohashi-sana-card.jpg",
+    theme: "#95c887",
+    charm: "Mint clover",
+  },
+  "山本杏奈": {
+    image: "./assets/cards/optimized/yamamoto-anna-card.jpg",
+    theme: "#4e8fe8",
+    charm: "Blue crystal",
+  },
 };
 
 const app = document.querySelector("#app");
@@ -20,19 +60,12 @@ const state = {
   answers: {},
 };
 
-function getPhotoSrc(member) {
-  return memberPhotos[member];
-}
-
-function renderMemberPhoto(member, className = "member-photo") {
-  const src = getPhotoSrc(member);
-  const initials = member.slice(0, 2);
-  return `
-    <div class="${className}" aria-label="${member}の写真枠">
-      <img src="${src}" alt="${member}" onerror="this.remove(); this.parentElement.dataset.empty='true';" />
-      <span>${initials}</span>
-    </div>
-  `;
+function cardFor(member) {
+  return memberCards[member] || {
+    image: "./assets/cards/optimized/love-heart.jpg",
+    theme: "#f26f9d",
+    charm: "Equal love",
+  };
 }
 
 function getEmptyMemberScores() {
@@ -90,8 +123,12 @@ function pickResultMember(scores) {
   return candidates[0];
 }
 
+function answeredCount() {
+  return Object.keys(state.answers).length;
+}
+
 function getProgressText() {
-  return `${Object.keys(state.answers).length}/${diagnosisData.questions.length}`;
+  return `${answeredCount()}/${diagnosisData.questions.length}`;
 }
 
 function setAnswer(questionId, optionId) {
@@ -102,7 +139,7 @@ function setAnswer(questionId, optionId) {
 }
 
 function showResult() {
-  if (Object.keys(state.answers).length !== diagnosisData.questions.length) return;
+  if (answeredCount() !== diagnosisData.questions.length) return;
   state.step = "result";
   render();
 }
@@ -121,18 +158,53 @@ function shareOnX(member) {
   window.open(url, "_blank", "noopener,noreferrer");
 }
 
+function renderCardStack() {
+  const featured = ["齋藤樹愛羅", "大谷映美里", "山本杏奈", "諸橋沙夏", "髙松瞳"];
+  return featured
+    .map((member, index) => {
+      const card = cardFor(member);
+      return `
+        <figure class="hero-card hero-card-${index + 1}" style="--card-color: ${card.theme}">
+          <img src="${card.image}" alt="" loading="${index === 1 ? "eager" : "lazy"}" />
+        </figure>
+      `;
+    })
+    .join("");
+}
+
+function renderMemberChips() {
+  return diagnosisData.members
+    .map((member) => {
+      const card = cardFor(member);
+      return `<span class="member-chip" style="--chip-color: ${card.theme}">${member}</span>`;
+    })
+    .join("");
+}
+
 function renderIntro() {
   app.innerHTML = `
     <section class="intro-view">
-      <div class="hero-panel">
-        <p class="eyebrow">Fan personality quiz</p>
-        <h1>${diagnosisData.meta.title}</h1>
-        <p class="subtitle">${diagnosisData.meta.subtitle}</p>
-        <div class="member-strip" aria-hidden="true">
-          ${diagnosisData.members.map((member) => renderMemberPhoto(member, "mini-photo")).join("")}
-        </div>
-        <button class="primary-action" type="button" data-action="start">診断をはじめる</button>
+      <div class="sparkle-field" aria-hidden="true">
+        <span></span><span></span><span></span><span></span><span></span>
       </div>
+      <section class="hero-stage">
+        <div class="hero-copy">
+          <p class="eyebrow">Unofficial fan quiz</p>
+          <h1 class="hero-title"><span>イコラブ</span><span>性格タイプ</span><span>診断</span></h1>
+          <p class="subtitle">${diagnosisData.meta.subtitle}</p>
+          <div class="hero-actions">
+            <button class="primary-action" type="button" data-action="start">診断をはじめる</button>
+          </div>
+          <p class="micro-copy">20問であなたのタイプを判定</p>
+        </div>
+        <div class="hero-visual" aria-hidden="true">
+          <img class="love-mark" src="./assets/cards/optimized/love-heart.jpg" alt="" />
+          <div class="card-stack">${renderCardStack()}</div>
+        </div>
+      </section>
+      <section class="member-ribbon" aria-label="診断結果メンバー一覧">
+        ${renderMemberChips()}
+      </section>
       <p class="disclaimer">${diagnosisData.meta.disclaimer}</p>
     </section>
   `;
@@ -141,8 +213,8 @@ function renderIntro() {
 function renderQuestion() {
   const question = diagnosisData.questions[state.currentIndex];
   const selected = state.answers[question.id];
-  const canShowResult = Object.keys(state.answers).length === diagnosisData.questions.length;
-  const progress = Math.round((Object.keys(state.answers).length / diagnosisData.questions.length) * 100);
+  const canShowResult = answeredCount() === diagnosisData.questions.length;
+  const progress = Math.round((answeredCount() / diagnosisData.questions.length) * 100);
 
   app.innerHTML = `
     <section class="quiz-view">
@@ -183,17 +255,23 @@ function renderResult() {
   const scores = calculateScores();
   const member = pickResultMember(scores);
   const result = diagnosisData.results[member];
+  const card = cardFor(member);
 
   app.innerHTML = `
-    <section class="result-view">
+    <section class="result-view" style="--result-color: ${card.theme}">
       <article class="result-hero">
-        ${renderMemberPhoto(member, "result-photo")}
-        <p class="eyebrow">Your type is</p>
-        <h1><span>${member}</span><span>タイプ</span></h1>
-        <h2>${result.title}</h2>
+        <div class="result-card">
+          <img src="${card.image}" alt="${member}タイプのイメージカード" />
+        </div>
+        <div class="result-copy">
+          <p class="eyebrow">Your type is</p>
+          <h1><span>${member}</span><span>タイプ</span></h1>
+          <h2>${result.title}</h2>
+          <p class="result-charm">${card.charm}</p>
+        </div>
       </article>
       <section class="result-body">
-        <div class="text-block">
+        <div class="text-block main-block">
           <h3>性格タイプ</h3>
           <p>${result.personality}</p>
         </div>
